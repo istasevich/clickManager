@@ -24,12 +24,17 @@ class BadDomainRepository implements iBadDomainsRepository
 	/**
 	 * @param BadDomain $badDomain
 	 * @return BadDomain
+	 * @throws \Exception
 	 */
 	public function create(BadDomain $badDomain)
 	{
-		$this->dbConnection->createCommand()->insert('bad_domains', [
-			'name' => $badDomain->getName(),
-		])->execute();
+		try {
+			$this->dbConnection->createCommand()->insert('bad_domains', [
+				'name' => $badDomain->getName(),
+			])->execute();
+		} catch (\Exception $e) {
+			throw new \Exception($e->getMessage());
+		}
 
 		$id = $this->dbConnection->getLastInsertID();
 
