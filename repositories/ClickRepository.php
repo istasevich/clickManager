@@ -16,22 +16,27 @@ class ClickRepository implements iClickRepository
 
 	/**
 	 * @param Click $click
-	 * @return Click
+	 * @return bool
+	 * @throws \Exception
 	 */
 	public function create(Click $click)
 	{
-		$this->dbConnection->createCommand()->insert('click', [
-			'id' => $click->getId(),
-			'ua' => $click->getUserAgent(),
-			'ip' => ip2long($click->getIp()),
-			'ref' => $click->getReferral(),
-			'param1' => $click->getParam1(),
-			'param2' => $click->getParam2(),
-			'error' => $click->getError(),
-			'bad_domain' => $click->getBadDomain()
-		])->execute();
+		try {
+			$this->dbConnection->createCommand()->insert('click', [
+				'id' => $click->getId(),
+				'ua' => $click->getUserAgent(),
+				'ip' => ip2long($click->getIp()),
+				'ref' => $click->getReferral(),
+				'param1' => $click->getParam1(),
+				'param2' => $click->getParam2(),
+				'error' => $click->getError(),
+				'bad_domain' => $click->getBadDomain()
+			])->execute();
+		} catch (\Exception $e) {
+			throw new \Exception('Cant save click');
+		}
 
-		return $click;
+		return true;
 	}
 
 	/**
