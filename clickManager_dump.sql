@@ -41,7 +41,7 @@ CREATE TABLE `click` (
   `ip` int(11) NOT NULL,
   `ref` varchar(255) DEFAULT '',
   `param1` varchar(255) DEFAULT '',
-  `param2` varchar(255) NOT NULL DEFAULT '',
+  `param2` varchar(255) DEFAULT '',
   `error` int(10) unsigned NOT NULL,
   `bad_domain` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
