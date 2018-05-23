@@ -35,6 +35,9 @@ class ClickController extends Controller
 
 	public function actionIndex()
 	{
+		/**
+		 * Here I do not use the Yii container, because Yii uses it through the Service Locator :)
+		 */
 		$serviceCreateClick = new ClickCreate($this->clickRepository, $this->badDomainRepository);
 
 		try {

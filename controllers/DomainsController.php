@@ -21,6 +21,11 @@ class DomainsController  extends Controller
 	public function init()
 	{
 		$dbConnection = \Yii::$app->getDb();
+
+		/**
+		 * Here I do not use the Yii container, because Yii uses it through the Service Locator :)
+		 */
+
 		$this->badDomainRepository = new BadDomainRepository($dbConnection);
 		$this->badDomainServiceCreate = new BadDomainCreate($this->badDomainRepository);
 

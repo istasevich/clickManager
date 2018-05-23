@@ -15,6 +15,8 @@ class SiteController extends Controller
 	public function init()
 	{
 		parent::init();
+
+
 		$this->clickRepository = new ClickRepository(\Yii::$app->getDb());
 	}
 
