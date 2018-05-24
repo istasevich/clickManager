@@ -3,6 +3,8 @@
 namespace app\models;
 
 
+use app\services\builder\AbstractClickBuilder;
+
 class Click
 {
 	private $id;
@@ -21,36 +23,24 @@ class Click
 
 	private $bad_domain;
 
-	public static function fromState($state) : Click
-	{
-		return new self(
-			$state['id'],
-			$state['ua'],
-			$state['ip'],
-			$state['ref'],
-			$state['param1'],
-			$state['param2'],
-			$state['error'],
-			$state['bad_domain']
-		);
-	}
 
-	public function __construct($id = 0, $ua = '', $ip = 0, $ref = '', $param1 = '', $param2 = '', $error = 0, $bad_domain = 0)
+	public function __construct(AbstractClickBuilder $builder)
 	{
-		if (empty($id)) {
+		if (empty($builder->id)) {
 			$this->id = md5(
-				$ua . ',' . $ip . ',' . $ref . ',' . $param1 . ',' . uniqid()
+				$builder->useAgent . ',' . $builder->ip . ',' . $builder->ref . ',' . $builder->ref . ',' . uniqid()
 			);
 		} else {
-			$this->id = $id;
+			$this->id = $builder->id;
 		}
-		$this->ua = $ua;
-		$this->ip = $ip;
-		$this->ref = $ref;
-		$this->param1 = $param1;
-		$this->param2 = $param2;
-		$this->error = $error;
-		$this->bad_domain = $bad_domain;
+
+		$this->ua = $builder->useAgent;
+		$this->ip = $builder->ip;
+		$this->ref = $builder->ref;
+		$this->param1 = $builder->param1;
+		$this->param2 = $builder->param2;
+		$this->error = $builder->error;
+		$this->bad_domain = $builder->badDomain;
 	}
 
 	public function getId()

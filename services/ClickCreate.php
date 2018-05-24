@@ -5,6 +5,7 @@ use app\models\Click;
 use app\models\ClickValidation;
 use app\repositories\interfaces\iBadDomainsRepository;
 use app\repositories\interfaces\iClickRepository;
+use app\services\builder\ClickBuilderRequest;
 use app\services\interfaces\iRequest;
 use app\services\interfaces\iServices;
 
@@ -42,14 +43,7 @@ class ClickCreate implements iServices
 			throw new \Exception($e->getMessage());
 		}
 
-		$click = new Click(
-			0,
-			$request->getUserAgent(),
-			$request->getIp(),
-			$request->getReferral(),
-			$request->getParam1(),
-			$request->getParam2()
-		);
+		$click = (new ClickBuilderRequest($request))->addParams()->build();
 
 		/** @var Click $existClick */
 		$existClick = $this->clickRepository->findUnique($click);

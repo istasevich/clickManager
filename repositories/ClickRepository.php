@@ -3,6 +3,7 @@ namespace app\repositories;
 
 use \app\models\Click;
 use app\repositories\interfaces\iClickRepository;
+use app\services\builder\ClickBuilder;
 use yii\db\Query;
 
 class ClickRepository implements iClickRepository
@@ -67,7 +68,7 @@ class ClickRepository implements iClickRepository
 			return null;
 		}
 
-		return Click::fromState($click);
+		return (new ClickBuilder($click))->build();
 	}
 
 
@@ -105,7 +106,7 @@ class ClickRepository implements iClickRepository
 
 		if ($isArray === false) {
 			return array_map(function ($item) {
-				return Click::fromState($item);
+				return (new ClickBuilder($item))->addParams()->build();
 			}, $result);
 		}
 
