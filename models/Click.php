@@ -17,7 +17,7 @@ class Click
 
 	private $param2;
 
-	private $error;
+	private $error = 0;
 
 	private $bad_domain;
 
@@ -96,12 +96,14 @@ class Click
 
 	public function incrementError()
 	{
-		$this->error =+ 1;
+		$this->error++;
+		return $this;
 	}
 
 	public function setBadDomain()
 	{
 		$this->bad_domain = 1;
+		return $this;
 	}
 
 }

@@ -73,14 +73,16 @@ class ClickRepository implements iClickRepository
 
 	/**
 	 * @param Click $click
-	 * @return array
+	 * @return Click
 	 */
 	public function findUnique(Click $click)
 	{
-		return $this->find([
+		$uniqueClick =  $this->find([
 			'ua' => $click->getUserAgent(), 'ip' => ip2long($click->getIp()),
 			'ref' => $click->getReferral(), 'param1' => $click->getParam1()
 		]);
+
+		return $uniqueClick[0] ?? null;
 	}
 
 	/**
