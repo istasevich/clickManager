@@ -22,18 +22,30 @@ class ClickRepository implements iClickRepository
 	public function create(Click $click)
 	{
 		try {
-			$this->dbConnection->createCommand()->insert('click', [
-				'id' => $click->getId(),
-				'ua' => $click->getUserAgent(),
-				'ip' => ip2long($click->getIp()),
-				'ref' => $click->getReferral(),
-				'param1' => $click->getParam1(),
-				'param2' => $click->getParam2(),
-				'error' => $click->getError(),
-				'bad_domain' => $click->getBadDomain()
-			])->execute();
+			$this->dbConnection->createCommand()
+				->insert('click', $this->_setClickParams($click))
+				->execute();
 		} catch (\Exception $e) {
 			throw new \Exception('Cant save click');
+		}
+
+		return true;
+	}
+
+	/**
+	 * TODO::need update only changed fields!
+	 * @param Click $click
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function update(Click $click)
+	{
+		try {
+			$this->dbConnection->createCommand()
+				->update('click', $this->_setClickParams($click), ['id' => $click->getId()])
+				->execute();
+		} catch (\Exception $e) {
+			throw new \Exception('Cant update click');
 		}
 
 		return true;
@@ -58,26 +70,6 @@ class ClickRepository implements iClickRepository
 		return Click::fromState($click);
 	}
 
-	/**
-	 * @param Click $click
-	 * @return Click
-	 */
-	public function incrementError(Click $click)
-	{
-		$this->dbConnection->createCommand()->update('click', [
-			'error' => (int) $click->getError() + 1], ['id' => $click->getId()])->execute();
-
-		return $click;
-	}
-
-	/**
-	 * @param Click $click
-	 */
-	public function setBadDomain(Click $click)
-	{
-		$this->dbConnection->createCommand()->update('click', [
-			'bad_domain' => 1], ['id' => $click->getId()])->execute();
-	}
 
 	/**
 	 * @param Click $click
@@ -116,6 +108,20 @@ class ClickRepository implements iClickRepository
 		}
 
 		return $result;
+	}
+
+	protected function _setClickParams(Click $click)
+	{
+		return [
+			'id' => $click->getId(),
+			'ua' => $click->getUserAgent(),
+			'ip' => ip2long($click->getIp()),
+			'ref' => $click->getReferral(),
+			'param1' => $click->getParam1(),
+			'param2' => $click->getParam2(),
+			'error' => $click->getError(),
+			'bad_domain' => $click->getBadDomain()
+		];
 	}
 
 }

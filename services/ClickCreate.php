@@ -53,18 +53,20 @@ class ClickCreate implements iServices
 
 		$existClick = $this->clickRepository->findUnique($click);
 
-		$this->clickRepository->create($click);
-
 		if (!$validator->validateBadDomain($this->badDomainsRepository)) {
-			$this->clickRepository->setBadDomain($click);
-			$this->clickRepository->incrementError($click);
+			$click->incrementError();
+			$click->setBadDomain();
 		}
 
 		if ($existClick != null) {
-			$this->clickRepository->incrementError($click);
+			$click->incrementError();
+		} else {
+			$this->clickRepository->create($click);
 		}
 
-		return $this->clickRepository->findOne($click->getId());
+		return $click;
+
+		//return $this->clickRepository->findOne($click->getId());
 	}
 
 	public function getError()

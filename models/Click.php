@@ -94,4 +94,14 @@ class Click
 		return $this->bad_domain;
 	}
 
+	public function incrementError()
+	{
+		$this->error =+ 1;
+	}
+
+	public function setBadDomain()
+	{
+		$this->bad_domain = 1;
+	}
+
 }

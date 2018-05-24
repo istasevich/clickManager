@@ -44,7 +44,6 @@ class ClickController extends Controller
 			$click = $serviceCreateClick->execute($this->clickRequest);
 		} catch(\Exception $e) {
 			throw new \Exception($e->getMessage());
-			//return $this->redirect('/');
 		}
 
 		if (!empty($click->getError())) {
